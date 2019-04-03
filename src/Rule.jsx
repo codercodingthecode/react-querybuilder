@@ -1,4 +1,5 @@
 import React from 'react';
+import { ActionElement, ValueEditor, ValueSelector, GroupSelector, GateSelector } from './controls';
 
 export default class Rule extends React.Component {
   static get defaultProps() {
@@ -14,48 +15,88 @@ export default class Rule extends React.Component {
 
   render() {
     const {
+      index,
+      onAddRule,
+      rules,
       field,
       operator,
       value,
       translations,
-      schema: { fields, controls, getOperators, getLevel, classNames }
+      schema: { fields, controls, getOperators, getLevel, classNames, combinators }
     } = this.props;
     const level = getLevel(this.props.id);
+    const setOperator = operator === 'null' ? '=' : operator
+    console.log('OPERATOR -> ', operator, setOperator)
     return (
       <div className={`rule ${classNames.rule}`}>
-        {React.createElement(controls.fieldSelector, {
-          options: fields,
-          title: translations.fields.title,
-          value: field,
-          className: `rule-fields ${classNames.fields}`,
-          handleOnChange: this.onFieldChanged,
-          level: level
-        })}
-        {React.createElement(controls.operatorSelector, {
-          field: field,
-          title: translations.operators.title,
-          options: getOperators(field),
-          value: operator,
-          className: `rule-operators ${classNames.operators}`,
-          handleOnChange: this.onOperatorChanged,
-          level: level
-        })}
-        {React.createElement(controls.valueEditor, {
-          field: field,
-          title: translations.value.title,
-          operator: operator,
-          value: value,
-          className: `rule-value ${classNames.value}`,
-          handleOnChange: this.onValueChanged,
-          level: level
-        })}
-        {React.createElement(controls.removeRuleAction, {
-          label: translations.removeRule.label,
-          title: translations.removeRule.title,
-          className: `rule-remove ${classNames.removeRule}`,
-          handleOnClick: this.removeRule,
-          level: level
-        })}
+
+
+
+        <ActionElement
+          label={translations.addRule.label}
+          title={translations.addRule.title}
+          handleOnClick={onAddRule}
+          rules={rules}
+          level={level}
+        />
+
+        <ActionElement
+          label={translations.removeRule.label}
+          title={translations.removeRule.title}
+          handleOnClick={this.removeRule}
+          level={level}
+        />
+
+        {/* // checkbox will be used to group query entries and deactivate once queries are in a group */}
+        <GroupSelector
+          label={translations.addRule.label}
+          title={translations.addRule.title}
+        // handleOnClick={this.addGroup}
+        // rules={rules}
+        // level={level}
+        />
+
+        {/* // univessal compinator loaded upon fetching payload data */}
+
+          <GateSelector
+          
+          isVisible={index}
+          options={combinators}
+          // value={combinator}
+          // title={translations.combinators.title}
+          // handleOnChange={this.onCombinatorChange}
+          rules={rules}
+          level={level}
+          />
+
+
+        <ValueSelector
+          options={fields}
+          title={translations.fields.title}
+          value={field}
+          handleOnChange={this.onFieldChanged}
+          level={level}
+        />
+
+
+        <ValueSelector
+          field={field}
+          title={translations.operators.title}
+          options={getOperators(field)}
+          value={setOperator}
+          handleOnChange={this.onOperatorChanged}
+          level={level}
+        />
+
+        <ValueEditor
+          field={field}
+          title={translations.value.title}
+          operator={setOperator}
+          value={value}
+          options={getOperators(field)}
+          handleOnChange={this.onValueChanged}
+          level={level}
+        />
       </div>
     );
   }

@@ -2,24 +2,22 @@ import uniqueId from 'uuid/v4';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ValueSelector = (props) => {
-  const { value, options, className, handleOnChange, title } = props;
-
+const GateSelector = (props) => {
+  const { value, options, className, handleOnChange, title, isVisible } = props;
+  const displayIt = isVisible === 0 && 'hidden';
+  console.log('isvisible -> ', displayIt, isVisible)
   return (
     <select className={className}
             value={value}
             title={title}
-            onChange={e=>handleOnChange(e.target.value)}>
+            onChange={e=>handleOnChange(e.target.value)}
+            style={{visibility: displayIt }}
+            >
       {
         options.map(option=> {
           const key = option.id ? `key-${option.id}` : `key-${option.name}`;
           return (
-            <option
-              // selected={option.name.equal}
-              key={key} 
-              value={option.name}
-              >{option.label}</option>
-
+            <option key={key} value={option.name}>{option.label}</option>
           );
         })
       }
@@ -27,9 +25,9 @@ const ValueSelector = (props) => {
   );
 }
 
-ValueSelector.displayName = 'ValueSelector';
+GateSelector.displayName = 'GateSelector';
 
-ValueSelector.propTypes = {
+GateSelector.propTypes = {
   value: PropTypes.string,
   options: PropTypes.array.isRequired,
   className: PropTypes.string,
@@ -37,4 +35,4 @@ ValueSelector.propTypes = {
   title: PropTypes.string,
 };
 
-export default ValueSelector;
+export default GateSelector;

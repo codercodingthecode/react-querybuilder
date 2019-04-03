@@ -71,8 +71,7 @@ export default class QueryBuilder extends React.Component {
         title: 'Remove group'
       },
       addRule: {
-        label: '+Rule',
-        title: 'Add rule'
+        label: '+',
       },
       addGroup: {
         label: '+Group',

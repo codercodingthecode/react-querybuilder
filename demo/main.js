@@ -108,16 +108,15 @@ class RootView extends React.Component {
           <button onClick={() => this.loadQuery()}>Clear query</button>
         </div>
         <hr />
-        <div className="flex-box">
+        <div >
           <div className="scroll">
             <QueryBuilder
               query={this.state.query}
               fields={this.state.fields}
-              controlClassnames={{ fields: 'form-control' }}
               onQueryChange={this.handleQueryChange}
             />
           </div>
-          <div className="shrink query-log scroll">
+          <div >
             <h4>Query</h4>
             <pre>{JSON.stringify(this.state.query, null, 2)}</pre>
           </div>
